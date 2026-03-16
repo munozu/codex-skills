@@ -59,18 +59,29 @@ Validation:
 [List tests or alternate validation steps from the plan]
 
 ## Implementation Instructions
-1. Examine relevant files in the codebase.
-2. Implement the changes needed to satisfy all acceptance criteria.
-3. Keep the work **atomic and committable**; avoid sweeping changes beyond the task scope.
-4. For each file you modify:
-   - Read the file first.
-   - Edit carefully, preserving formatting.
-   - If creating a new file, write it with appropriate content.
-5. Run the validation steps if feasible in this environment.
-6. When done, provide a summary of:
+1. Read the working plan and fully understand this task before coding.
+2. Read relevant files first, then do targeted codebase research (related modules, tests, call sites, and dependencies) to confirm the implementation approach.
+3. Default to TDD RED phase first using a `tdd_test_writer` subagent:
+   - Pass full task context and acceptance criteria.
+   - Require tests-only edits.
+   - Require command output proving new/updated tests fail for the expected behavior gap.
+   - If this task is not a good TDD candidate, explicitly record `reason_not_testable` and define alternative verification evidence (for example `manual_check`, `static_check`, or `runtime_check`) with an exact command or concrete validation steps.
+4. Treat RED-phase tests (or approved non-testable verification plan) as the implementation contract. Do not weaken or remove tests unless requirements changed.
+5. Implement the production changes needed to satisfy all acceptance criteria.
+6. Run validation:
+   - For testable tasks, run the exact new/updated test command(s) until they pass (GREEN).
+   - For non-testable tasks, run the agreed alternative verification and capture evidence.
+   - Run additional validation listed in the plan if feasible.
+7. Commit your work:
+   - Keep the work atomic and committable; avoid sweeping changes beyond task scope.
+   - Stage only files for this task because other agents may be working in parallel.
+   - NEVER PUSH. ONLY COMMIT.
+8. After committing, update the task entry in the `*-plan.md` file with completion status, concise work log, files modified/created, and errors/gotchas encountered.
+9. Return a summary of:
    - Files modified/created
    - Changes made
    - How acceptance criteria are satisfied
+   - Verification evidence: RED -> GREEN or documented non-testable alternative
    - Validation steps performed or deferred
 
 ## Important Notes
@@ -89,7 +100,7 @@ After subagents complete:
    - Which tasks encountered issues/blockers
    - Overall status of the sprint/phase execution
    - Any next steps needed
-3. When a task is completed, ALWAYS mark the task COMPLETED! And update the original task description with a concise log
+3. When a task is completed, verify a local commit exists, then mark the task COMPLETED and update the original task description with a concise log
    of your work, any files modified/created, and changes made.
    - In addition to logs, if you encountered: note any errors, gotchas, or unexpected behavior encountered during the task. 
 
